@@ -6,8 +6,8 @@ import { UserModel } from "../modules/users.js";
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-    const {username, password} = req.body;
-    const user = await UserModel.findOne({username});
+    const {email, password} = req.body;
+    const user = await UserModel.findOne({email});
 
     if(user)
     {
@@ -16,26 +16,26 @@ router.post("/register", async (req, res) => {
 
     const hashedpassword = await bcrypt.hash(password, 10);
 
-    const newUser = new UserModel({username, password: hashedpassword});
+    const newUser = new UserModel({email, password: hashedpassword});
     await newUser.save();
 
     res.json({message: "user registered successfully"});
 });
 
 router.post("/login", async (req, res) => {
-    const {username, password} = req.body;
-    const user = await UserModel.findOne({username});
+    const {email, password} = req.body;
+    const user = await UserModel.findOne({email});
     
     if(!user)
     {
-        res.json({message: "user doesn't exist"});
+        return res.json({message: "user doesn't exist"});
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if(!isPasswordValid)
     {
-        return res.json({message: "username or password incorrect"});
+        return res.json({message: "email or password incorrect"});
     }
 
     const token = jwt.sign({id: user._id}, process.env.JWTSECRET);
