@@ -2,10 +2,13 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { UserModel } from "../modules/users.js";
+import dotenv from "dotenv";
+import { verifyToken } from "../middlewares/verify.js";
+dotenv.config()
 
 const router = express.Router();
 
-router.post("/register", async (req, res) => {
+router.post("/register", verifyToken, async (req, res) => {
     const {email, password} = req.body;
     const user = await UserModel.findOne({email});
 
