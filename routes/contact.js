@@ -8,7 +8,7 @@ router.post("/sendmessage", async (req, res) => {
     const {nom, prenom, sujet, message} = req.body;
 
     const now = new Date();
-    const dateNtime = date.format(now, "HH:mm:ss, DD/MM/YYYY");
+    const dateNtime = date.format(now, "HH:mm, DD/MM/YYYY");
 
     const newMessage = new MessageModel({nom, prenom, sujet, message, dateNtime});
     await newMessage.save();
