@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
+import { TemoinModel } from "../modules/temoins.js";
 
 const router = express.Router();
 
@@ -17,10 +18,13 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 router.post("/temoin", upload.single("image"), async (req, res) => {
-    console.log(req.file);
     const {nom, prenom, fonction, note, temoigne} = req.body;
-    console.log({nom, prenom, fonction, note, temoigne});
-    res.json({messaage: "check server console"});
+    const image = req.file.filename;
+
+    const newTemoin = new TemoinModel({nom, prenom, fonction, note, temoigne, image});
+    await newTemoin.save();
+
+    res.json({message: "temoin saved"});
 });
 
 export { router as temoinRouter };
