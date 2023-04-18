@@ -17,6 +17,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
+router.get("/temoin", async (req, res) => {
+    try{
+        const temoins = await TemoinModel.find();
+        res.json({testimonies: temoins});
+    }
+    catch (err)
+    {
+        console.log(err);
+        res.json(err);
+    }
+})
+
 router.post("/temoin", upload.single("image"), async (req, res) => {
     const {nom, prenom, fonction, note, temoigne} = req.body;
     const image = req.file.filename;
