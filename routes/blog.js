@@ -2,6 +2,7 @@ import express from "express";
 import { BlogModel } from "../modules/blogs.js";
 import multer from "multer";
 import path from "path";
+import { verifyToken } from "../middlewares/verify.js";
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/", verifyToken, upload.single("image"), async (req, res) => {
     const {title, content, date, category} = req.body;
     const image = req.file.filename;
     const comments = []
