@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "path";
 import { verifyToken } from "../middlewares/verify.js";
 import { CategoryModel } from "../modules/categories.js";
+import date from 'date-and-time';
 
 const router = express.Router();
 
@@ -45,6 +46,38 @@ router.get("/:id", async (req, res) => {
     try{
         const blogs = await BlogModel.find({category: category.name});
         res.json({blogs: blogs});
+    }
+    catch (err)
+    {
+        res.json(err);
+    }
+})
+
+router.get("/post/:id", async (req, res) => {
+    const {id} = req.params;
+
+    try{
+        const blog = await BlogModel.findById(id);
+        console.log(blog);
+        res.json({blog: blog});
+    }
+    catch (err)
+    {
+        res.json(err);
+    }
+})
+
+router.post("/comment", async (req, res) => {
+    const {id, username, comment} = req.body;
+
+    const now = new Date();
+    const dateNtime = date.format(now, "HH:mm, DD/MM/YYYY");
+
+    try{
+        const blog = await BlogModel.findById(id);
+        blog.comments.push({username: username, date:  dateNtime, comment: comment});
+        await blog.save();
+        res.json({message: "blog comments updated"})
     }
     catch (err)
     {
