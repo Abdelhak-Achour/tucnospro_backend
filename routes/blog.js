@@ -86,11 +86,14 @@ router.post("/comment", async (req, res) => {
 })
 
 router.post("/", verifyToken, upload.single("image"), async (req, res) => {
-    const {title, content, date, category} = req.body;
+    const {title, content, category} = req.body;
     const image = req.file.filename;
     const comments = []
 
-    const newTemoin = new BlogModel({title, content, date, category, image, comments});
+    const now = new Date();
+    const dateNtime = date.format(now, "DD/MM/YYYY");
+
+    const newTemoin = new BlogModel({title: title, content: content, date: dateNtime,category: category, image: image, comments: comments});
     await newTemoin.save();
 
     res.json({message: "blog saved"});
