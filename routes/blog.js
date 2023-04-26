@@ -160,4 +160,17 @@ router.put("/noimage", verifyToken, async (req, res) => {
     }
 });
 
+router.delete("/:id", async (req, res) => {
+    try
+    {
+        const {id} = req.params;
+        await BlogModel.findByIdAndDelete(id);
+        res.json({message: "blog deleted"});
+    }
+    catch(err)
+    {
+        res.json(err);
+    }
+})
+
 export { router as blogRouter };
