@@ -99,4 +99,65 @@ router.post("/", verifyToken, upload.single("image"), async (req, res) => {
     res.json({message: "blog saved"});
 });
 
+router.put("/", verifyToken, upload.single("image"), async (req, res) => {
+    try
+    {
+        const {blogId, title, content, category} = req.body;
+        const blog = await BlogModel.findById(blogId);
+        const image = req.file.filename;
+
+        if(title != "")
+        {
+            blog.title = title;
+        }
+        if(content != "")
+        {
+            blog.content = content;
+        }
+        if(category != "")
+        {
+            blog.category = category;
+        }
+
+        blog.image = image;
+
+        await blog.save();
+
+        res.json({message: "blog updated"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
+router.put("/noimage", verifyToken, async (req, res) => {
+    try
+    {
+        const {blogId, title, content, category} = req.body;
+        const blog = await BlogModel.findById(blogId);
+
+        if(title != "")
+        {
+            blog.title = title;
+        }
+        if(content != "")
+        {
+            blog.content = content;
+        }
+        if(category != "")
+        {
+            blog.category = category;
+        }
+
+        await blog.save();
+
+        res.json({message: "blog updatd"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
 export { router as blogRouter };
