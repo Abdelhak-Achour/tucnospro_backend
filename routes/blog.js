@@ -160,7 +160,7 @@ router.put("/noimage", verifyToken, async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
     try
     {
         const {id} = req.params;
