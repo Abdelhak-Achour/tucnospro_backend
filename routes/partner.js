@@ -29,13 +29,71 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", verifyToken, upload.single("image"), async (req, res) => {
-    const {nom} = req.body;
+    const {name} = req.body;
     const image = req.file.filename;
 
-    const newPartner = new PartnerModel({nom, image});
+    const newPartner = new PartnerModel({nom: name, image: image});
     await newPartner.save();
 
     res.json({message: "partner saved"});
 });
+
+router.put("/", verifyToken, upload.single("image"), async (req, res) => {
+    try
+    {
+        const {partnerId, name} = req.body;
+        const partner = await PartnerModel.findById(partnerId);
+        const image = req.file.filename;
+
+        if(name != "")
+        {
+            partner.nom = name;
+        }
+
+        partner.image = image;
+
+        await partner.save();
+
+        res.json({message: "partner updated"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
+router.put("/noimage", verifyToken, async (req, res) => {
+    try
+    {
+        const {partnerId, name} = req.body;
+        const partner = await PartnerModel.findById(partnerId);
+
+        if(name != "")
+        {
+            partner.nom = name;
+        }
+
+        await partner.save();
+
+        res.json({message: "partner updatd"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
+router.delete("/:id", verifyToken, async (req, res) => {
+    try
+    {
+        const {id} = req.params;
+        await PartnerModel.findByIdAndDelete(id);
+        res.json({message: "blog deleted"});
+    }
+    catch(err)
+    {
+        res.json(err);
+    }
+})
 
 export { router as partnerRouter };
