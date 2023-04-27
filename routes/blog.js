@@ -26,7 +26,6 @@ router.get("/", async (req, res) => {
     }
     catch (err)
     {
-        console.log(err);
         res.json(err);
     }
 })
@@ -58,7 +57,6 @@ router.get("/post/:id", async (req, res) => {
 
     try{
         const blog = await BlogModel.findById(id);
-        console.log(blog);
         res.json({blog: blog});
     }
     catch (err)
