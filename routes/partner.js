@@ -1,7 +1,8 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { TemoinModel } from "../modules/temoins.js";
+import { verifyToken } from "../middlewares/verify.js";
+import { PartnerModel } from "../modules/partner.js";
 
 const router = express.Router();
 
@@ -16,10 +17,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
-router.get("/temoin", async (req, res) => {
+router.get("/", async (req, res) => {
     try{
-        const temoins = await TemoinModel.find();
-        res.json({testimonies: temoins});
+        const partners = await PartnerModel.find();
+        res.json({partners: partners});
     }
     catch (err)
     {
@@ -27,14 +28,14 @@ router.get("/temoin", async (req, res) => {
     }
 })
 
-router.post("/temoin", upload.single("image"), async (req, res) => {
-    const {nom, prenom, fonction, note, temoigne} = req.body;
+router.post("/", verifyToken, upload.single("image"), async (req, res) => {
+    const {nom} = req.body;
     const image = req.file.filename;
 
-    const newTemoin = new TemoinModel({nom, prenom, fonction, note, temoigne, image});
-    await newTemoin.save();
+    const newPartner = new PartnerModel({nom, image});
+    await newPartner.save();
 
-    res.json({message: "temoin saved"});
+    res.json({message: "partner saved"});
 });
 
-export { router as temoinRouter };
+export { router as partnerRouter };

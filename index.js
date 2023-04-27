@@ -7,6 +7,7 @@ import { contactRouter } from "./routes/contact.js";
 import { temoinRouter } from "./routes/temoin.js";
 import { blogRouter } from "./routes/blog.js";
 import { categoryRouter } from "./routes/category.js";
+import { partnerRouter } from "./routes/partner.js";
 dotenv.config()
 
 const app = express();
@@ -19,6 +20,7 @@ app.use("/contact", contactRouter);
 app.use("/about", temoinRouter);
 app.use("/blog", blogRouter);
 app.use("/category", categoryRouter);
+app.use("/partner", partnerRouter);
 
 
 mongoose.connect(process.env.MDBLINK);
