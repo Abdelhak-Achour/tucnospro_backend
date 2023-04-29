@@ -32,4 +32,38 @@ router.post("/", verifyToken, async (req,res) => {
     res.json({message: "category saved"});
 })
 
+router.put("/", verifyToken, async (req, res) => {
+    try
+    {
+        const {categoryId, name} = req.body;
+        const category = await CategoryModel.findById(categoryId);
+
+        if(name != "")
+        {
+            category.name = name;
+        }
+
+        await category.save();
+
+        res.json({message: "category updatd"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
+router.delete("/:id", verifyToken, async (req, res) => {
+    try
+    {
+        const {id} = req.params;
+        await CategoryModel.findByIdAndDelete(id);
+        res.json({message: "category deleted"});
+    }
+    catch(err)
+    {
+        res.json(err);
+    }
+})
+
 export { router as categoryRouter}

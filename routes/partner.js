@@ -88,7 +88,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
     {
         const {id} = req.params;
         await PartnerModel.findByIdAndDelete(id);
-        res.json({message: "blog deleted"});
+        res.json({message: "partner deleted"});
     }
     catch(err)
     {
