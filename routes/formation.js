@@ -82,6 +82,38 @@ router.post("/comment", async (req, res) => {
     }
 })
 
+router.post("/inscrire", async (req, res) => {
+    const {id, lastname, name, email, address, phonenumber, situation, studieslvl, studiesspecific, speciality, type, contactmethod, questions} = req.body;
+
+    const now = new Date();
+    const dateNtime = date.format(now, "HH:mm, DD/MM/YYYY");
+
+    try{
+        const formation = await FormationModel.findById(id);
+        formation.inscriptions.push({
+            lastname: lastname,
+            name: name,
+            email: email,
+            address: address,
+            phonenumber: phonenumber,
+            situation: situation,
+            studieslvl: studieslvl,
+            studiesspecific: studiesspecific,
+            speciality: speciality,
+            type: type,
+            contactmethod: contactmethod,
+            questions: questions,
+            date: dateNtime
+        });
+        await formation.save();
+        res.json({message: "formation comments updated"})
+    }
+    catch (err)
+    {
+        res.json(err);
+    }
+})
+
 router.post("/", verifyToken, upload.array("image"), async (req, res) => {
     const {name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
     const image = req.files[0].filename;
@@ -113,33 +145,83 @@ router.post("/", verifyToken, upload.array("image"), async (req, res) => {
         inscriptions: inscriptions,
         comments: comments
     });
-    
+
     await newFormation.save();
 
     res.json({message: "formation saved"});
 });
 
-router.put("/", verifyToken, upload.single("image"), upload.single("formateur_image"), async (req, res) => {
+router.put("/", verifyToken, upload.array("image"), async (req, res) => {
     try
     {
-        const {formationId, title, content, category} = req.body;
+        const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
         const image = req.file.filename;
 
-        if(title != "")
+        if(name != "")
         {
-            formation.title = title;
+            formation.name = name;
         }
-        if(content != "")
+        if(price != "")
         {
-            formation.content = content;
+            formation.price = price;
+        }
+        if(date != "")
+        {
+            formation.date = date;
+        }
+        if(duration != "")
+        {
+            formation.duration = duration;
         }
         if(category != "")
         {
             formation.category = category;
         }
-
-        formation.image = image;
+        if(description != "")
+        {
+            formation.description = description;
+        }
+        if(long_description != "")
+        {
+            formation.long_description = long_description;
+        }
+        if(formateur != "")
+        {
+            formation.formateur = formateur;
+        }
+        if(program != "")
+        {
+            formation.program = program;
+        }
+        if(requirements != "")
+        {
+            formation.requirements = requirements;
+        }
+        if(objectif != "")
+        {
+            formation.objectif = objectif;
+        }
+        if(plan != "")
+        {
+            formation.plan = plan;
+        }
+        if(tools != "")
+        {
+            formation.tools = tools;
+        }
+        if(target != "")
+        {
+            formation.target = target;
+        }
+        if(req.files[0])
+        {
+            formation.image = req.files[0].filename;
+        }
+        if(req.files[1])
+        {
+            formation.formateur_image = req.files[1].filename;
+        }
 
         await formation.save();
 
@@ -154,25 +236,69 @@ router.put("/", verifyToken, upload.single("image"), upload.single("formateur_im
 router.put("/noimage", verifyToken, async (req, res) => {
     try
     {
-        const {formationId, title, content, category} = req.body;
+        const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
 
-        if(title != "")
+        if(name != "")
         {
-            formation.title = title;
+            formation.name = name;
         }
-        if(content != "")
+        if(price != "")
         {
-            formation.content = content;
+            formation.price = price;
+        }
+        if(date != "")
+        {
+            formation.date = date;
+        }
+        if(duration != "")
+        {
+            formation.duration = duration;
         }
         if(category != "")
         {
             formation.category = category;
         }
+        if(description != "")
+        {
+            formation.description = description;
+        }
+        if(long_description != "")
+        {
+            formation.long_description = long_description;
+        }
+        if(formateur != "")
+        {
+            formation.formateur = formateur;
+        }
+        if(program != "")
+        {
+            formation.program = program;
+        }
+        if(requirements != "")
+        {
+            formation.requirements = requirements;
+        }
+        if(objectif != "")
+        {
+            formation.objectif = objectif;
+        }
+        if(plan != "")
+        {
+            formation.plan = plan;
+        }
+        if(tools != "")
+        {
+            formation.tools = tools;
+        }
+        if(target != "")
+        {
+            formation.target = target;
+        }
 
         await formation.save();
 
-        res.json({message: "formation updatd"});
+        res.json({message: "formation updated"});
     }
     catch (err)
     {

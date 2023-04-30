@@ -78,13 +78,7 @@ const FormationSchema = new mongoose.Schema({
         address: {
             type: String
         },
-        address: {
-            type: String
-        },
         phonenumber: {
-            type: String
-        },
-        address: {
             type: String
         },
         situation: {
