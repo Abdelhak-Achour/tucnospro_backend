@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/bycategory/:id", async (req, res) => {
     const {id} = req.params;
     
     try
@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-router.get("/post/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     const {id} = req.params;
 
     try{
@@ -121,10 +121,6 @@ router.post("/", verifyToken, upload.array("image"), async (req, res) => {
     const comments = [];
     const inscriptions = [];
 
-    console.log(req.file);
-    console.log(req.files);
-    console.log({name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target});
-
     const newFormation = new FormationModel({
         name: name,
         price: price,
@@ -156,7 +152,6 @@ router.put("/", verifyToken, upload.array("image"), async (req, res) => {
     {
         const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
-        const image = req.file.filename;
 
         if(name != "")
         {
