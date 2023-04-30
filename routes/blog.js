@@ -91,8 +91,8 @@ router.post("/", verifyToken, upload.single("image"), async (req, res) => {
     const now = new Date();
     const dateNtime = date.format(now, "DD/MM/YYYY");
 
-    const newTemoin = new BlogModel({title: title, content: content, date: dateNtime, category: category, image: image, comments: comments});
-    await newTemoin.save();
+    const newBlog = new BlogModel({title: title, content: content, date: dateNtime, category: category, image: image, comments: comments});
+    await newBlog.save();
 
     res.json({message: "blog saved"});
 });
