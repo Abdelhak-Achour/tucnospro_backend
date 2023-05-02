@@ -4,6 +4,7 @@ import path from "path";
 import { verifyToken } from "../middlewares/verify.js";
 import dateformater from 'date-and-time';
 import { FormationModel } from "../modules/formations.js";
+import { CategoryModel } from "../modules/categories.js";
 
 const router = express.Router();
 
@@ -42,7 +43,7 @@ router.get("/bycategory/:id", async (req, res) => {
     }
 
     try{
-        const formations = await formationModel.find({category: category.name});
+        const formations = await FormationModel.find({category: category.name});
         res.json({formations: formations});
     }
     catch (err)
@@ -152,7 +153,6 @@ router.put("/", verifyToken, upload.array("image"), async (req, res) => {
     {
         const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
-        console.log(req.files);
 
         if(name != "")
         {
@@ -229,7 +229,6 @@ router.put("/image", verifyToken, upload.single("image"), async (req, res) => {
     {
         const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
-        console.log(req.files);
 
         if(name != "")
         {
@@ -305,7 +304,6 @@ router.put("/formateurimage", verifyToken, upload.single("image"), async (req, r
     {
         const {formationId, name, price, date, duration, category, description, long_description, formateur, program, requirements, objectif, plan, tools, target} = req.body;
         const formation = await FormationModel.findById(formationId);
-        console.log(req.files);
 
         if(name != "")
         {
