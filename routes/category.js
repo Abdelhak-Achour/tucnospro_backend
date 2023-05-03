@@ -1,8 +1,21 @@
 import express from "express";
 import { CategoryModel } from "../modules/categories.js";
 import { verifyToken } from "../middlewares/verify.js";
+import multer from "multer";
+import path from "path";
 
 const router = express.Router()
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, '../tucnospro/src/images');
+    },
+    filename: (req, file, callback) => {
+        callback(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({storage: storage});
 
 router.get("/", async (req, res) => {
     try
@@ -17,8 +30,9 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.post("/", verifyToken, async (req,res) => {
-    const {name} = req.body;
+router.post("/", verifyToken, upload.single("image"), async (req,res) => {
+    const {name, description} = req.body;
+    const image = req.file.filename;
 
     const category = await CategoryModel.findOne({name});
     if (category)
@@ -26,21 +40,54 @@ router.post("/", verifyToken, async (req,res) => {
         return res.json({message: "category already exists"});
     }
 
-    const newCategory = new CategoryModel({name});
+    const newCategory = new CategoryModel({name, description, image});
     await newCategory.save();
 
     res.json({message: "category saved"});
 })
 
-router.put("/", verifyToken, async (req, res) => {
+router.put("/", verifyToken, upload.single("image"), async (req, res) => {
     try
     {
-        const {categoryId, name} = req.body;
+        const {categoryId, name, description} = req.body;
+        const image = req.file.filename;
+
         const category = await CategoryModel.findById(categoryId);
 
         if(name != "")
         {
             category.name = name;
+        }
+        if(description != "")
+        {
+            category.description = description;
+        }
+
+        category.image = image;
+
+        await category.save();
+
+        res.json({message: "category updatd"});
+    }
+    catch (err)
+    {
+        res.json(err)
+    }
+});
+
+router.put("/noimage", verifyToken, async (req, res) => {
+    try
+    {
+        const {categoryId, name, description} = req.body;
+        const category = await CategoryModel.findById(categoryId);
+
+        if(name != "")
+        {
+            category.name = name;
+        }
+        if(description != "")
+        {
+            category.description = description;
         }
 
         await category.save();
