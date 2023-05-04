@@ -107,7 +107,7 @@ router.post("/inscrire", async (req, res) => {
             date: dateNtime
         });
         await formation.save();
-        res.json({message: "formation comments updated"})
+        res.json({message: "formation subs updated"})
     }
     catch (err)
     {
