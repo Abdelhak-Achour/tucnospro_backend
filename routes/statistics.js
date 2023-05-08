@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     try
     {
         const statistics = await StatisticsModel.find();
-        res.json({statistics: statistics});
+        res.json({stats: statistics});
     }
     catch(err)
     {
