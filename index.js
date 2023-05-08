@@ -10,6 +10,7 @@ import { categoryRouter } from "./routes/category.js";
 import { partnerRouter } from "./routes/partner.js";
 import { formationRouter } from "./routes/formation.js";
 import { newsletterRouter } from "./routes/newsletter.js";
+import { statsRouter } from "./routes/statistics.js";
 dotenv.config()
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/category", categoryRouter);
 app.use("/partner", partnerRouter);
 app.use("/formation", formationRouter);
 app.use("/newsletter", newsletterRouter);
+app.use("/stats", statsRouter);
 
 mongoose.connect(process.env.MDBLINK);
 
