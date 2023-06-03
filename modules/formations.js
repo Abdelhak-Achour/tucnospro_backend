@@ -115,6 +115,9 @@ const FormationSchema = new mongoose.Schema({
         },
         comment: {
             type: String
+        },
+        score: {
+            type: String
         }
     }]
 });

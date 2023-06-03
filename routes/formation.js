@@ -66,14 +66,14 @@ router.get("/:id", async (req, res) => {
 })
 
 router.post("/comment", async (req, res) => {
-    const {id, username, comment} = req.body;
+    const {id, username, comment, score} = req.body;
 
     const now = new Date();
     const dateNtime = dateformater.format(now, "HH:mm, DD/MM/YYYY");
 
     try{
         const formation = await FormationModel.findById(id);
-        formation.comments.push({username: username, date:  dateNtime, comment: comment});
+        formation.comments.push({username: username, date:  dateNtime, comment: comment, score: score});
         await formation.save();
         res.json({message: "formation comments updated"})
     }
